@@ -1,0 +1,29 @@
+name: "diva_softmax_DIVA"
+
+action_selector: "epsilon_greedy"
+epsilon_start: 1.0
+epsilon_finish: 0.05
+epsilon_anneal_time: 70000
+
+runner: "episode"
+buffer_size: 5000
+target_update_interval: 200
+
+agent: "rnn_DIVA"
+agent_output_type: "q"
+learner: "q_learner_DIVA"
+mac: "basic_mac_DIVA"
+mixer: "softmax_DIVA"
+double_q: True
+
+mixing_embed_dim: 32
+hypernet_layers: 2
+hypernet_embed: 64
+
+diva_use_spectral_norm: True
+diva_r_max: 10.0
+diva_softplus_offset: 0.001
+
+use_action_repr: False
+obs_agent_id: True
+obs_last_action: True
