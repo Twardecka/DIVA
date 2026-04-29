@@ -46,6 +46,9 @@ class SoftplusMixerDIVA(nn.Module):
 
     def forward(self, agent_qs, states):
         bs = agent_qs.size(0)
+        device = next(self.parameters()).device
+        agent_qs = agent_qs.to(device)
+        states = states.to(device)
         states = states.reshape(-1, self.state_dim)
         agent_qs = agent_qs.view(-1, self.n_agents)
 

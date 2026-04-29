@@ -67,6 +67,17 @@ This will download SC2 into the 3rdparty folder and copy the maps necessary to r
 
 The requirements.txt file can be used to install the necessary packages into a virtual environment.
 
+## Viewing results in TensorBoard
+
+Sacred runs under `results/sacred` can be exported into TensorBoard event files grouped by environment:
+
+```shell
+python scripts/export_sacred_to_tensorboard.py --group-by env --purge
+tensorboard --logdir results/tb_logs_sacred
+```
+
+This creates a directory layout like `results/tb_logs_sacred/gather/...`, `results/tb_logs_sacred/hallway/...`, and `results/tb_logs_sacred/disperse/...` so the TensorBoard sidebar is divided by environment.
+
 ## Saving and loading learnt models
 
 ### Saving models

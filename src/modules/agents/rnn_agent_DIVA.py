@@ -43,9 +43,12 @@ class RNNAgentDIVA(nn.Module):
         self.fc2 = _sn_linear(args.rnn_hidden_dim, args.n_actions, self.use_spectral_norm)
 
     def init_hidden(self):
-        return self.fc1.weight.new(1, self.args.rnn_hidden_dim).zero_()
+        return next(self.parameters()).new_zeros(1, self.args.rnn_hidden_dim)
 
     def forward(self, inputs, hidden_state):
+        device = next(self.parameters()).device
+        inputs = inputs.to(device)
+        hidden_state = hidden_state.to(device)
         x = F.relu(self.fc1(inputs))
         h_in = hidden_state.reshape(-1, self.args.rnn_hidden_dim)
         h = self.rnn(x, h_in)

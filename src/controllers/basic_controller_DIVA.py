@@ -23,6 +23,10 @@ class BasicMACDIVA:
     def forward(self, ep_batch, t, test_mode=False):
         agent_inputs = self._build_inputs(ep_batch, t)
         avail_actions = ep_batch["avail_actions"][:, t]
+        device = next(self.agent.parameters()).device
+        agent_inputs = agent_inputs.to(device)
+        if self.hidden_states is not None:
+            self.hidden_states = self.hidden_states.to(device)
         agent_outs, self.hidden_states = self.agent(agent_inputs, self.hidden_states)
 
         if self.agent_output_type == "pi_logits":
@@ -45,7 +49,8 @@ class BasicMACDIVA:
         return agent_outs.view(ep_batch.batch_size, self.n_agents, -1)
 
     def init_hidden(self, batch_size):
-        self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1)
+        device = next(self.agent.parameters()).device
+        self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1).to(device)
 
     def parameters(self):
         return self.agent.parameters()
@@ -64,6 +69,8 @@ class BasicMACDIVA:
 
     def _build_agents(self, input_shape):
         self.agent = agent_REGISTRY[self.args.agent](input_shape, self.args)
+        if getattr(self.args, "use_cuda", False):
+            self.agent.to(self.args.device)
 
     def _build_inputs(self, batch, t):
         bs = batch.batch_size

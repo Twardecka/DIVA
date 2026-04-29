@@ -1,7 +1,9 @@
 import copy
+from modules.mixers.bounded_sigmoid_qmix_mixer_DIVA import BoundedSigmoidQMixerDIVA
 from components.episode_buffer import EpisodeBatch
 from modules.mixers.softmax_mixer_DIVA import SoftmaxMixerDIVA
 from modules.mixers.softplus_mixer_DIVA import SoftplusMixerDIVA
+from modules.mixers.softplus_qmix_mixer_DIVA import SoftplusQMixerDIVA
 import torch as th
 from torch.optim import RMSprop
 
@@ -19,6 +21,10 @@ class QLearnerDIVA:
             self.mixer = SoftmaxMixerDIVA(args)
         elif args.mixer == "softplus_DIVA":
             self.mixer = SoftplusMixerDIVA(args)
+        elif args.mixer == "softplus_qmix_DIVA":
+            self.mixer = SoftplusQMixerDIVA(args)
+        elif args.mixer == "bounded_sigmoid_qmix_DIVA":
+            self.mixer = BoundedSigmoidQMixerDIVA(args)
         else:
             raise ValueError("DIVA mixer {} not recognised.".format(args.mixer))
 
