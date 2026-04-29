@@ -277,3 +277,6 @@ baseline-top5-runs:
 pursuit-then-baseline-top5-runs:
 	$(MAKE) diva-theorem-pursuit PYTHON=$(PYTHON) USE_CUDA=$(USE_CUDA) DIVA_THEOREM_CONFIG=$(DIVA_THEOREM_CONFIG)
 	$(MAKE) baseline-top5-runs PYTHON=$(PYTHON) USE_CUDA=$(USE_CUDA) QMIX_CONFIG=$(QMIX_CONFIG) VDN_CONFIG=$(VDN_CONFIG) QTRAN_CONFIG=$(QTRAN_CONFIG)
+
+run_baselines: 
+	for f in runs_baselines/*.job; do sbatch $$f; done
