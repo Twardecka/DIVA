@@ -22,12 +22,14 @@ class RNNAgent(nn.Module):
         # make hidden states on same device as model
         return self.fc1.weight.new(1, self.args.rnn_hidden_dim).zero_()
 
-    def forward(self, inputs, hidden_state, action_repr):
+    def forward(self, inputs, hidden_state, action_repr=None):
         x = F.relu(self.fc1(inputs))
         h_in = hidden_state.reshape(-1, self.args.rnn_hidden_dim)
         h = self.rnn(x, h_in)
 
         if self.use_action_repr:
+            if action_repr is None:
+                raise ValueError("action_repr must be provided when use_action_repr is enabled")
             key = self.fc2(h).unsqueeze(-1)  # [bs*n, al, 1]
             action_repr_reshaped = action_repr.unsqueeze(0).repeat(key.shape[0], 1, 1)
             q = th.bmm(action_repr_reshaped, key).squeeze()

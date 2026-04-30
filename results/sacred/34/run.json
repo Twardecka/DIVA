@@ -13,17 +13,17 @@
     "name": "pymarl",
     "repositories": [
       {
-        "commit": "a6c569283fdd7c2f1e815a95eabc2b0612bb1c3d",
+        "commit": "7dde89440bad67f40777cef1f602f274fd418b95",
         "dirty": true,
         "url": "https://github.com/Twardecka/DIVA.git"
       },
       {
-        "commit": "a6c569283fdd7c2f1e815a95eabc2b0612bb1c3d",
+        "commit": "7dde89440bad67f40777cef1f602f274fd418b95",
         "dirty": true,
         "url": "https://github.com/Twardecka/DIVA.git"
       },
       {
-        "commit": "a6c569283fdd7c2f1e815a95eabc2b0612bb1c3d",
+        "commit": "7dde89440bad67f40777cef1f602f274fd418b95",
         "dirty": true,
         "url": "https://github.com/Twardecka/DIVA.git"
       }
@@ -43,35 +43,10 @@
       ]
     ]
   },
-  "heartbeat": "2026-04-30T03:24:57.334069",
+  "heartbeat": null,
   "host": {
     "ENV": {},
     "cpu": "INTEL(R) XEON(R) GOLD 6530",
-    "gpus": {
-      "driver_version": "580.126.09",
-      "gpus": [
-        {
-          "model": "NVIDIA RTX 6000 Ada Generation",
-          "persistence_mode": false,
-          "total_memory": 49140
-        },
-        {
-          "model": "NVIDIA RTX 6000 Ada Generation",
-          "persistence_mode": false,
-          "total_memory": 49140
-        },
-        {
-          "model": "NVIDIA RTX 6000 Ada Generation",
-          "persistence_mode": false,
-          "total_memory": 49140
-        },
-        {
-          "model": "NVIDIA RTX 6000 Ada Generation",
-          "persistence_mode": false,
-          "total_memory": 49140
-        }
-      ]
-    },
     "hostname": "riogrande",
     "os": [
       "Linux",
@@ -82,8 +57,16 @@
   "meta": {
     "command": "my_main",
     "config_updates": {
-      "seed": 1,
-      "use_cuda": true
+      "learner_log_interval": 100000,
+      "log_interval": 100000,
+      "runner_log_interval": 100000,
+      "save_model": false,
+      "seed": 124,
+      "t_max": 1,
+      "test_interval": 100000,
+      "test_nepisode": 1,
+      "use_cuda": false,
+      "use_tensorboard": false
     },
     "named_configs": [],
     "options": {
@@ -109,15 +92,22 @@
       "--unobserved": false,
       "COMMAND": null,
       "UPDATE": [
-        "seed=1",
-        "use_cuda=True"
+        "use_cuda=False",
+        "use_tensorboard=False",
+        "save_model=False",
+        "seed=124",
+        "t_max=1",
+        "test_interval=100000",
+        "log_interval=100000",
+        "runner_log_interval=100000",
+        "learner_log_interval=100000",
+        "test_nepisode=1"
       ],
       "help": false,
       "with": true
     }
   },
   "resources": [],
-  "result": null,
-  "start_time": "2026-04-28T22:07:39.650424",
+  "start_time": "2026-04-30T04:08:58.432411",
   "status": "RUNNING"
 }
