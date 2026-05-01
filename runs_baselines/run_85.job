@@ -6,6 +6,7 @@
 #SBATCH --cpus-per-task=64
 #SBATCH --mem=128G
 #SBATCH --time=48:00:00
+#SBATCH --gres=gpu:1
 
 set -euo pipefail
 
@@ -19,4 +20,5 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 echo "Starting parallel job script"
-python3 src/main.py --config=qmix --env-config=gather with seed=8 use_cuda=False
+echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-<unset>}"
+python3 src/main.py --config=qmix --env-config=gather with seed=8 use_cuda=True

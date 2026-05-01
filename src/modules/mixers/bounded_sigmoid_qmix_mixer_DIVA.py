@@ -84,6 +84,7 @@ class BoundedSigmoidQMixerDIVA(nn.Module):
             1,
             self.use_spectral_norm,
         )
+        self.latest_stats = {}
 
     def forward(self, agent_qs, states):
         bs = agent_qs.size(0)
@@ -105,5 +106,24 @@ class BoundedSigmoidQMixerDIVA(nn.Module):
         w_final = w_final.view(-1, self.embed_dim, 1)
         v = _bounded_signed(self.V(states), self.v_scale).view(-1, 1, 1)
 
+        self.latest_stats = {
+            "gate_mean": gates.mean().detach(),
+            "gate_std": gates.std(unbiased=False).detach(),
+            "gate_min": gates.min().detach(),
+            "gate_max": gates.max().detach(),
+            "w1_mean": w1.mean().detach(),
+            "w1_std": w1.std(unbiased=False).detach(),
+            "w1_min": w1.min().detach(),
+            "w1_max": w1.max().detach(),
+            "w2_mean": w_final.mean().detach(),
+            "w2_std": w_final.std(unbiased=False).detach(),
+            "w2_min": w_final.min().detach(),
+            "w2_max": w_final.max().detach(),
+            "v_mean": v.mean().detach(),
+        }
+
         q_tot = th.bmm(hidden, w_final) + v
         return q_tot.view(bs, -1, 1)
+
+    def get_logging_stats(self):
+        return {name: value.item() for name, value in self.latest_stats.items()}

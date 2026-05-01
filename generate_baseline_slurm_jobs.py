@@ -17,6 +17,8 @@ DEFAULT_PYTHON_BIN = "python3"
 DEFAULT_ALGOS = ["qmix", "vdn", "qtran"]
 DEFAULT_ENVS = ["gather", "hallway", "disperse", "pursuit"]
 DEFAULT_SEEDS = list(range(1, 9))
+DEFAULT_USE_CUDA = True
+DEFAULT_GPUS_PER_JOB = 1
 
 
 def parse_args() -> argparse.Namespace:
@@ -41,9 +43,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--use-cuda",
-        action="store_true",
-        default=False,
-        help="Set use_cuda=True in the generated training command.",
+        action=argparse.BooleanOptionalAction,
+        default=DEFAULT_USE_CUDA,
+        help="Set use_cuda in the generated training command.",
+    )
+    parser.add_argument(
+        "--gpus-per-job",
+        type=int,
+        default=DEFAULT_GPUS_PER_JOB,
+        help="Number of GPUs to request for each job when use_cuda=True.",
     )
     parser.add_argument(
         "--extra-override",
@@ -64,14 +72,22 @@ def build_header(args: argparse.Namespace) -> list[str]:
         f"#SBATCH --cpus-per-task={args.cpus_per_task}",
         f"#SBATCH --mem={args.mem}",
         f"#SBATCH --time={args.time}",
-        "",
-        "set -euo pipefail",
-        "",
-        'if command -v conda >/dev/null 2>&1; then',
-        '  eval "$(conda shell.bash hook)"',
-        f"  conda activate {args.conda_env}",
-        "fi",
     ]
+
+    if args.use_cuda and args.gpus_per_job > 0:
+        lines.append(f"#SBATCH --gres=gpu:{args.gpus_per_job}")
+
+    lines.extend(
+        [
+            "",
+            "set -euo pipefail",
+            "",
+            'if command -v conda >/dev/null 2>&1; then',
+            '  eval "$(conda shell.bash hook)"',
+            f"  conda activate {args.conda_env}",
+            "fi",
+        ]
+    )
 
     modules = args.modules if args.modules is not None else DEFAULT_MODULES
     if modules:
@@ -84,6 +100,7 @@ def build_header(args: argparse.Namespace) -> list[str]:
             'cd "$ROOT_DIR"',
             "",
             'echo "Starting parallel job script"',
+            'echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-<unset>}"',
         ]
     )
     return lines
