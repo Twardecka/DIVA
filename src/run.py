@@ -34,7 +34,8 @@ def run(_run, _config, _log):
     _log.info("\n\n" + experiment_params + "\n")
 
     # configure tensorboard logger
-    unique_token = "{}__{}".format(args.name, datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    unique_token = "{}-seed{}__{}".format(args.name, args.seed, timestamp)
     args.unique_token = unique_token
     if args.use_tensorboard:
         tb_logs_direc = os.path.join(dirname(dirname(abspath(__file__))), "results", "tb_logs")
@@ -109,11 +110,11 @@ def run_sequential(args, logger):
     # Setup multiagent controller here
     '''
     print (buffer.scheme)
-    {'state': {'vshape': 322}, 'obs': {'vshape': 176, 'group': 'agents'}, 
-    'actions': {'vshape': (1,), 'group': 'agents', 'dtype': torch.int64}, 
-    'avail_actions': {'vshape': (18,), 'group': 'agents', 'dtype': torch.int32}, 'reward': {'vshape': (1,)}, 
-    'terminated': {'vshape': (1,), 'dtype': torch.uint8}, 
-    'actions_onehot': {'vshape': (18,), 'dtype': torch.float32, 'group': 'agents'}, 
+    {'state': {'vshape': 322}, 'obs': {'vshape': 176, 'group': 'agents'},
+    'actions': {'vshape': (1,), 'group': 'agents', 'dtype': torch.int64},
+    'avail_actions': {'vshape': (18,), 'group': 'agents', 'dtype': torch.int32}, 'reward': {'vshape': (1,)},
+    'terminated': {'vshape': (1,), 'dtype': torch.uint8},
+    'actions_onehot': {'vshape': (18,), 'dtype': torch.float32, 'group': 'agents'},
     'filled': {'vshape': (1,), 'dtype': torch.int64}}
     '''
     mac = mac_REGISTRY[args.mac](buffer.scheme, groups, args)
