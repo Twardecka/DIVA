@@ -41,6 +41,23 @@ RESULT_FOLDER_NAMES = {
     "disperse": "results_all_disperse",
 }
 
+RESULT_BUNDLE_SOURCE_PREFERENCE = {
+    "gather": {
+        "qmix": "baseline_new",
+        "vdn": "baseline_new",
+    },
+    "hallway": {
+        "qmix": "baseline_old",
+        "vdn": "baseline_old",
+        "qtran": "baseline_old",
+    },
+    "disperse": {
+        "qmix": "baseline_old",
+        "vdn": "baseline_old",
+        "qtran": "baseline_old",
+    },
+}
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -328,6 +345,17 @@ def write_result_bundle(bundle_dir, env_name, env_rows, fieldnames, csv_filename
         handle.write("\n".join(readme_lines) + "\n")
 
 
+def filter_result_bundle_rows(env_rows, env_name):
+    preferences = RESULT_BUNDLE_SOURCE_PREFERENCE.get(env_name, {})
+    filtered_rows = []
+    for row in env_rows:
+        preferred_source = preferences.get(row["algorithm"])
+        if preferred_source is not None and row["source_group"] != preferred_source:
+            continue
+        filtered_rows.append(row)
+    return filtered_rows
+
+
 def write_result_style_dirs(rows, repo_root):
     fieldnames = csv_fieldnames()
     top4_seed_map = {}
@@ -335,6 +363,7 @@ def write_result_style_dirs(rows, repo_root):
     for env_name in TARGET_ENVS:
         env_rows = [row for row in rows if row["env"] == env_name]
         env_rows.sort(key=lambda row: (row["algorithm"], row["seed"], row["source_group"], row["run_id"]))
+        bundle_rows = filter_result_bundle_rows(env_rows, env_name)
         top4_v1_seeds = select_top4_diva_v1_seeds(rows, env_name)
         top4_v2_seeds = select_top4_diva_v2_seeds(rows, env_name)
         top4_seed_map[env_name] = {"diva_v1": top4_v1_seeds, "diva_v2": top4_v2_seeds}
@@ -343,7 +372,7 @@ def write_result_style_dirs(rows, repo_root):
         write_result_bundle(
             results_dir,
             env_name,
-            env_rows,
+            bundle_rows,
             fieldnames,
             f"{env_name}_results.csv",
             [
@@ -368,7 +397,7 @@ def write_result_style_dirs(rows, repo_root):
         top4_dir = results_dir / "top4_by_diva_v1"
         top4_rows = [
             row
-            for row in env_rows
+            for row in bundle_rows
             if (
                 (row["algorithm"] == "diva_v1" and int(row["seed"]) in top4_v1_seeds)
                 or (row["algorithm"] == "diva_v2" and int(row["seed"]) in top4_v2_seeds)
