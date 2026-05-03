@@ -1,5 +1,6 @@
 .PHONY: all diva-tag-softmax diva-tag-softplus diva-gather-softmax diva-gather-softplus diva-tag-runs diva-gather-runs diva-all-runs
 .PHONY: diva-theorem-gather diva-theorem-hallway diva-theorem-disperse diva-theorem-pursuit diva-theorem-runs
+.PHONY: diva-theorem-tuned-hallway diva-theorem-tuned-disperse diva-theorem-tuned-hd-packed
 .PHONY: diva-top4-gh-packed diva-top4-dp-packed diva-top4-priority-packed diva-top6-priority-packed
 .PHONY: qmix-gather qmix-hallway qmix-disperse qmix-runs
 .PHONY: qmix-top5-gather qmix-top5-hallway qmix-top5-disperse qmix-top5-runs
@@ -16,6 +17,7 @@ SHELL := /bin/bash
 PYTHON ?= python
 USE_CUDA ?= True
 DIVA_THEOREM_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA
+DIVA_THEOREM_TUNED_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5
 DIVA_TOP4_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2
 DIVA_TOP6_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2
 QMIX_CONFIG ?= qmix
@@ -43,6 +45,9 @@ DIVA_PURSUIT_TOP4_SEEDS ?= 4 1 2 3
 DIVA_GATHER_TOP6_SEEDS ?= 8 2 4 5 3 7
 DIVA_HALLWAY_TOP6_SEEDS ?= 1 5 3 2 8 7
 DIVA_DISPERSE_TOP6_SEEDS ?= 2 3 6 5 1 8
+
+DIVA_THEOREM_TUNED_HALLWAY_SEEDS ?= 1 3 5 8
+DIVA_THEOREM_TUNED_DISPERSE_SEEDS ?= 1 3 5 8
 
 # Current top-5 gather seeds for the latest DIVA sweep in `results/sacred`,
 # ranked by latest logged `test_return_mean`.
@@ -504,6 +509,21 @@ diva-theorem-runs:
 	$(MAKE) diva-theorem-gather PYTHON=$(PYTHON) USE_CUDA=$(USE_CUDA) DIVA_THEOREM_CONFIG=$(DIVA_THEOREM_CONFIG)
 	$(MAKE) diva-theorem-hallway PYTHON=$(PYTHON) USE_CUDA=$(USE_CUDA) DIVA_THEOREM_CONFIG=$(DIVA_THEOREM_CONFIG)
 	$(MAKE) diva-theorem-disperse PYTHON=$(PYTHON) USE_CUDA=$(USE_CUDA) DIVA_THEOREM_CONFIG=$(DIVA_THEOREM_CONFIG)
+
+# Tuned theorem-safe DIVA run:
+# - config: diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5
+# - hallway seeds:  1 3 5 8
+# - disperse seeds: 1 3 5 8
+# - launches hallway + disperse together for 2 jobs per GPU
+
+diva-theorem-tuned-hallway:
+	@$(call run_one_baseline_for_env,$(DIVA_THEOREM_TUNED_CONFIG),hallway,$(DIVA_THEOREM_TUNED_HALLWAY_SEEDS))
+
+diva-theorem-tuned-disperse:
+	@$(call run_one_baseline_for_env,$(DIVA_THEOREM_TUNED_CONFIG),disperse,$(DIVA_THEOREM_TUNED_DISPERSE_SEEDS))
+
+diva-theorem-tuned-hd-packed:
+	@$(call run_one_baseline_for_two_envs,$(DIVA_THEOREM_TUNED_CONFIG),hallway,$(DIVA_THEOREM_TUNED_HALLWAY_SEEDS),disperse,$(DIVA_THEOREM_TUNED_DISPERSE_SEEDS))
 
 # QMIX sweeps:
 # - uses `qmix`
