@@ -12,7 +12,7 @@ DEFAULT_ACCOUNT = "prasanna_1363"
 DEFAULT_PARTITION = "main"
 DEFAULT_RUNS_DIRECTORY = "runs_baselines"
 DEFAULT_CONDA_ENV = "gacg"
-DEFAULT_MODULES = ["gcc/11.3.0", "git/2.36.1"]
+DEFAULT_MODULES = ["legacy/CentOS7", "gcc/11.3.0", "git/2.36.1"]
 DEFAULT_PYTHON_BIN = "python3"
 DEFAULT_ALGOS = ["qmix", "vdn", "qtran"]
 DEFAULT_ENVS = ["gather", "hallway", "disperse", "pursuit"]
@@ -77,18 +77,8 @@ def build_header(args: argparse.Namespace) -> list[str]:
     if args.use_cuda and args.gpus_per_job > 0:
         lines.append(f"#SBATCH --gres=gpu:{args.gpus_per_job}")
 
-    lines.extend(
-        [
-            "",
-            "set -euo pipefail",
-            "",
-            'if command -v conda >/dev/null 2>&1; then',
-            '  eval "$(conda shell.bash hook)"',
-            f"  conda activate {args.conda_env}",
-            "fi",
-        ]
-    )
-
+    lines.append("")
+    lines.append(f"conda activate {args.conda_env}")
     modules = args.modules if args.modules is not None else DEFAULT_MODULES
     if modules:
         lines.append(f"module load {' '.join(modules)}")
@@ -96,11 +86,7 @@ def build_header(args: argparse.Namespace) -> list[str]:
     lines.extend(
         [
             "",
-            'ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"',
-            'cd "$ROOT_DIR"',
-            "",
             'echo "Starting parallel job script"',
-            'echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-<unset>}"',
         ]
     )
     return lines
