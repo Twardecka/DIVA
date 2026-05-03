@@ -8,9 +8,9 @@ from pathlib import Path
 
 ACCOUNT = "prasanna_1363"
 PARTITION = "main"
-CONDA_ENV = "gacg"
+ACTIVATE_LINE = "source /home/ludwika/miniconda3/bin/activate gacg"
 MODULE_LINE = "module load legacy/CentOS7 gcc/11.3.0 git/2.36.1"
-PYTHON_BIN = "python3"
+PYTHON_BIN = "/home/ludwika/miniconda3/envs/gacg/bin/python"
 RUNS_DIR = Path("runs_baselines")
 SEEDS = [1, 3, 5, 8]
 ENVS = ["hallway", "disperse", "sensor"]
@@ -86,7 +86,7 @@ def build_job_script(job):
         "#SBATCH --mem=128G",
         "#SBATCH --time=48:00:00",
         "",
-        f"conda activate {CONDA_ENV}",
+        ACTIVATE_LINE,
         MODULE_LINE,
         "",
         'echo "Starting parallel job script"',
