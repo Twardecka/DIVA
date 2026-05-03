@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -33,6 +34,7 @@ METRICS_TO_EXPORT = (
 ALGORITHM_LABELS = {
     "diva_bounded_sigmoid_qmix_DIVA": "diva_v1",
     "diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2": "diva_v2",
+    "diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5": "diva_v3",
 }
 
 RESULT_FOLDER_NAMES = {
@@ -121,9 +123,47 @@ def algorithm_label(raw_name):
     return ALGORITHM_LABELS.get(raw_name, raw_name)
 
 
+def classify_run(source_name, run_id, raw_name):
+    if source_name == "baseline_new":
+        if raw_name in {"qmix", "vdn", "qtran"}:
+            return source_name, algorithm_label(raw_name)
+        if raw_name == "diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5" and 13 <= run_id <= 20:
+            return "diva_v3", algorithm_label(raw_name)
+        return None, None
+    return source_name, algorithm_label(raw_name)
+
+
 def sanitize_component(value):
     safe = str(value).strip().replace("/", "_").replace(" ", "_")
     return safe or "unknown"
+
+
+def safe_rmtree(path):
+    path = Path(path)
+    if not path.exists():
+        return
+    try:
+        shutil.rmtree(path)
+        return
+    except OSError:
+        pass
+
+    for root, dirnames, filenames in os.walk(path, topdown=False):
+        root_path = Path(root)
+        for filename in filenames:
+            try:
+                (root_path / filename).unlink()
+            except FileNotFoundError:
+                pass
+        for dirname in dirnames:
+            try:
+                (root_path / dirname).rmdir()
+            except OSError:
+                pass
+    try:
+        path.rmdir()
+    except OSError:
+        shutil.rmtree(path, ignore_errors=True)
 
 
 def gather_runs(repo_root):
@@ -158,9 +198,11 @@ def gather_runs(repo_root):
                 continue
 
             raw_name = config.get("name", "unknown_alg")
-            alg_label = algorithm_label(raw_name)
             seed = config.get("seed", "unknown_seed")
             run_id = int(run_dir.name)
+            classified_source, alg_label = classify_run(source_name, run_id, raw_name)
+            if classified_source is None:
+                continue
             latest_step = None
             series_by_key = {}
             for key, pairs in metric_series(info):
@@ -169,7 +211,7 @@ def gather_runs(repo_root):
                 latest_step = step if latest_step is None else max(latest_step, step)
 
             row = {
-                "source_group": source_name,
+                "source_group": classified_source,
                 "sacred_root": str(rel_root),
                 "run_id": run_id,
                 "run_dir": str(run_dir.relative_to(repo_root)),
@@ -243,6 +285,10 @@ def select_top4_diva_v1_seeds(rows, env_name):
 
 def select_top4_diva_v2_seeds(rows, env_name):
     return select_top4_diva_seeds(rows, env_name, "diva_v2", "diva_v2")
+
+
+def select_top4_diva_v3_seeds(rows, env_name):
+    return select_top4_diva_seeds(rows, env_name, "diva_v3", "diva_v3")
 
 
 def select_top4_diva_seeds(rows, env_name, algorithm, source_group):
@@ -366,7 +412,8 @@ def write_result_style_dirs(rows, repo_root):
         bundle_rows = filter_result_bundle_rows(env_rows, env_name)
         top4_v1_seeds = select_top4_diva_v1_seeds(rows, env_name)
         top4_v2_seeds = select_top4_diva_v2_seeds(rows, env_name)
-        top4_seed_map[env_name] = {"diva_v1": top4_v1_seeds, "diva_v2": top4_v2_seeds}
+        top4_v3_seeds = select_top4_diva_v3_seeds(rows, env_name)
+        top4_seed_map[env_name] = {"diva_v1": top4_v1_seeds, "diva_v2": top4_v2_seeds, "diva_v3": top4_v3_seeds}
 
         results_dir = repo_root / RESULT_FOLDER_NAMES[env_name]
         write_result_bundle(
@@ -388,9 +435,11 @@ def write_result_style_dirs(rows, repo_root):
                 "Algorithm labels:",
                 "- diva_v1 = diva_bounded_sigmoid_qmix_DIVA",
                 "- diva_v2 = diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2",
+                "- diva_v3 = results/sacred/13-20 (diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5 runs)",
                 "",
                 f"Top 4 diva_v1 seeds: {', '.join(str(seed) for seed in top4_v1_seeds)}",
                 f"Top 4 diva_v2 seeds: {', '.join(str(seed) for seed in top4_v2_seeds)}",
+                f"Top 4 diva_v3 seeds: {', '.join(str(seed) for seed in top4_v3_seeds)}",
             ],
         )
 
@@ -401,7 +450,8 @@ def write_result_style_dirs(rows, repo_root):
             if (
                 (row["algorithm"] == "diva_v1" and int(row["seed"]) in top4_v1_seeds)
                 or (row["algorithm"] == "diva_v2" and int(row["seed"]) in top4_v2_seeds)
-                or (row["algorithm"] not in {"diva_v1", "diva_v2"} and int(row["seed"]) in top4_v1_seeds)
+                or (row["algorithm"] == "diva_v3" and int(row["seed"]) in top4_v3_seeds)
+                or (row["algorithm"] not in {"diva_v1", "diva_v2", "diva_v3"} and int(row["seed"]) in top4_v1_seeds)
             )
         ]
         write_result_bundle(
@@ -416,6 +466,7 @@ def write_result_style_dirs(rows, repo_root):
                 "",
                 f"Selected seeds from diva_v1 for baselines/diva_v1: {', '.join(str(seed) for seed in top4_v1_seeds)}",
                 f"Selected seeds from diva_v2 for diva_v2: {', '.join(str(seed) for seed in top4_v2_seeds)}",
+                f"Selected seeds from diva_v3 for diva_v3: {', '.join(str(seed) for seed in top4_v3_seeds)}",
                 "Ranking rule:",
                 "- primary: test_battle_won_mean_best",
                 "- tie-break 1: test_return_mean_best",
@@ -446,6 +497,7 @@ def write_readme(rows, output_dir):
         handle.write("Algorithm labels:\n")
         handle.write("- diva_v1 = diva_bounded_sigmoid_qmix_DIVA\n")
         handle.write("- diva_v2 = diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2\n\n")
+        handle.write("- diva_v3 = results/sacred/13-20 (diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5)\n\n")
         handle.write("Run counts by environment:\n")
         for env_name in TARGET_ENVS:
             handle.write(f"- {env_name}: {counts.get(env_name, 0)} runs\n")
@@ -457,12 +509,12 @@ def main():
     output_dir = (repo_root / args.output_dir).resolve()
 
     if args.purge and output_dir.exists():
-        shutil.rmtree(output_dir)
+        safe_rmtree(output_dir)
     if args.purge:
         for env_name in TARGET_ENVS:
             results_dir = repo_root / RESULT_FOLDER_NAMES[env_name]
             if results_dir.exists():
-                shutil.rmtree(results_dir)
+                safe_rmtree(results_dir)
 
     rows = gather_runs(repo_root)
     write_csvs(rows, output_dir / "csv")
@@ -476,6 +528,7 @@ def main():
         print(f"- {repo_root / RESULT_FOLDER_NAMES[env_name]}")
         print(f"  top4 diva_v1 seeds: {top4_seed_map[env_name]['diva_v1']}")
         print(f"  top4 diva_v2 seeds: {top4_seed_map[env_name]['diva_v2']}")
+        print(f"  top4 diva_v3 seeds: {top4_seed_map[env_name]['diva_v3']}")
     for env_name in TARGET_ENVS:
         env_count = sum(1 for row in rows if row['env'] == env_name)
         print(f"{env_name}: {env_count} runs")

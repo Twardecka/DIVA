@@ -23,6 +23,7 @@ ENV_ROOTS = {
 DISPLAY_NAMES = {
     "diva_v1": "DIVA v1",
     "diva_v2": "DIVA v2",
+    "diva_v3": "DIVA v3",
     "qmix": "QMIX",
     "vdn": "VDN",
     "qtran": "QTRAN",
@@ -31,6 +32,7 @@ DISPLAY_NAMES = {
 COLOR_MAP = {
     "diva_v1": "#d62728",
     "diva_v2": "#ff9896",
+    "diva_v3": "#8c564b",
     "qmix": "#1f77b4",
     "vdn": "#2ca02c",
     "qtran": "#9467bd",
@@ -39,6 +41,7 @@ COLOR_MAP = {
 LINESTYLE_MAP = {
     "diva_v1": "-",
     "diva_v2": "--",
+    "diva_v3": (0, (5, 2)),
     "qmix": "-.",
     "vdn": ":",
     "qtran": (0, (3, 1, 1, 1)),
@@ -48,12 +51,14 @@ SOURCE_PREFERENCE = {
     "gather": {
         "diva_v1": "diva_v1",
         "diva_v2": "diva_v2",
+        "diva_v3": "diva_v3",
         "qmix": "baseline_new",
         "vdn": "baseline_new",
     },
     "hallway": {
         "diva_v1": "diva_v1",
         "diva_v2": "diva_v2",
+        "diva_v3": "diva_v3",
         "qmix": "baseline_old",
         "vdn": "baseline_old",
         "qtran": "baseline_old",
@@ -61,6 +66,7 @@ SOURCE_PREFERENCE = {
     "disperse": {
         "diva_v1": "diva_v1",
         "diva_v2": "diva_v2",
+        "diva_v3": "diva_v3",
         "qmix": "baseline_old",
         "vdn": "baseline_old",
         "qtran": "baseline_old",
@@ -79,7 +85,7 @@ METRIC_LABELS = {
     "test_ep_length_mean": "Test episode length mean",
 }
 
-PLOT_ORDER = ["diva_v1", "diva_v2", "qmix", "vdn", "qtran"]
+PLOT_ORDER = ["diva_v1", "diva_v2", "diva_v3", "qmix", "vdn", "qtran"]
 
 YLIM_OVERRIDES = {
     ("hallway", "test_return_mean"): (0.0, 5.0),

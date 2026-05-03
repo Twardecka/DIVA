@@ -1,6 +1,7 @@
 .PHONY: all diva-tag-softmax diva-tag-softplus diva-gather-softmax diva-gather-softplus diva-tag-runs diva-gather-runs diva-all-runs
 .PHONY: diva-theorem-gather diva-theorem-hallway diva-theorem-disperse diva-theorem-pursuit diva-theorem-runs
 .PHONY: diva-theorem-tuned-hallway diva-theorem-tuned-disperse diva-theorem-tuned-hd-packed
+.PHONY: diva-theorem-vscale1-clean-hallway diva-theorem-vscale1-clean-disperse diva-theorem-vscale1-clean-hd-packed
 .PHONY: diva-top4-gh-packed diva-top4-dp-packed diva-top4-priority-packed diva-top6-priority-packed
 .PHONY: qmix-gather qmix-hallway qmix-disperse qmix-runs
 .PHONY: qmix-top5-gather qmix-top5-hallway qmix-top5-disperse qmix-top5-runs
@@ -18,6 +19,7 @@ PYTHON ?= python
 USE_CUDA ?= True
 DIVA_THEOREM_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA
 DIVA_THEOREM_TUNED_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5
+DIVA_THEOREM_VSCALE1_CLEAN_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA_vscale1_clean
 DIVA_TOP4_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2
 DIVA_TOP6_CONFIG ?= diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2
 QMIX_CONFIG ?= qmix
@@ -524,6 +526,22 @@ diva-theorem-tuned-disperse:
 
 diva-theorem-tuned-hd-packed:
 	@$(call run_one_baseline_for_two_envs,$(DIVA_THEOREM_TUNED_CONFIG),hallway,$(DIVA_THEOREM_TUNED_HALLWAY_SEEDS),disperse,$(DIVA_THEOREM_TUNED_DISPERSE_SEEDS))
+
+# Clean v_scale ablation from the original theorem config:
+# - config: diva_bounded_sigmoid_qmix_DIVA_vscale1_clean
+# - only diva_v_scale differs from diva_bounded_sigmoid_qmix_DIVA
+# - hallway seeds:  1 3 5 8
+# - disperse seeds: 1 3 5 8
+# - launches hallway + disperse together for 2 jobs per GPU
+
+diva-theorem-vscale1-clean-hallway:
+	@$(call run_one_baseline_for_env,$(DIVA_THEOREM_VSCALE1_CLEAN_CONFIG),hallway,$(DIVA_THEOREM_TUNED_HALLWAY_SEEDS))
+
+diva-theorem-vscale1-clean-disperse:
+	@$(call run_one_baseline_for_env,$(DIVA_THEOREM_VSCALE1_CLEAN_CONFIG),disperse,$(DIVA_THEOREM_TUNED_DISPERSE_SEEDS))
+
+diva-theorem-vscale1-clean-hd-packed:
+	@$(call run_one_baseline_for_two_envs,$(DIVA_THEOREM_VSCALE1_CLEAN_CONFIG),hallway,$(DIVA_THEOREM_TUNED_HALLWAY_SEEDS),disperse,$(DIVA_THEOREM_TUNED_DISPERSE_SEEDS))
 
 # QMIX sweeps:
 # - uses `qmix`

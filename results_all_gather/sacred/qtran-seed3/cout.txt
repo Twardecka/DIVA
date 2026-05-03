@@ -1,0 +1,96 @@
+[INFO 03:20:12] pymarl Running command 'my_main'
+[INFO 03:20:12] pymarl Started run with ID "10"
+[DEBUG 03:20:12] pymarl Starting Heartbeat
+[DEBUG 03:20:12] my_main Started
+[INFO 03:20:12] my_main Experiment Parameters:
+[INFO 03:20:12] my_main 
+
+{   'action_selector': 'epsilon_greedy',
+    'agent': 'rnn',
+    'agent_output_type': 'q',
+    'batch_size': 32,
+    'batch_size_run': 1,
+    'buffer_cpu_only': True,
+    'buffer_size': 5000,
+    'checkpoint_path': '',
+    'critic_lr': 0.0005,
+    'double_q': True,
+    'env': 'gather',
+    'env_args': {   'catch_fail_reward': -5,
+                    'catch_reward': 10,
+                    'episode_limit': 8,
+                    'map_height': 3,
+                    'map_width': 5,
+                    'n_agents': 5,
+                    'obs_last_action': False,
+                    'other_reward': 5,
+                    'seed': 3,
+                    'state_last_action': True,
+                    'target_reward': 0.0},
+    'epsilon_anneal_time': 500000,
+    'epsilon_finish': 0.05,
+    'epsilon_start': 1.0,
+    'evaluate': False,
+    'gamma': 0.99,
+    'grad_norm_clip': 10,
+    'label': 'default_label',
+    'learner': 'qtran_learner',
+    'learner_log_interval': 10000,
+    'load_step': 0,
+    'local_results_path': 'results',
+    'log_interval': 10000,
+    'lr': 0.0005,
+    'mac': 'basic_mac',
+    'mixer': 'qtran_base',
+    'mixing_embed_dim': 32,
+    'name': 'qtran',
+    'network_size': 'small',
+    'nopt_min_loss': 0.1,
+    'obs_agent_id': True,
+    'obs_last_action': True,
+    'opt_loss': 1.0,
+    'optim_alpha': 0.99,
+    'optim_eps': 1e-05,
+    'qtran_arch': 'qtran_paper',
+    'repeat_id': 1,
+    'rnn_hidden_dim': 64,
+    'runner': 'episode',
+    'runner_log_interval': 10000,
+    'save_model': True,
+    'save_model_interval': 2000000,
+    'save_replay': False,
+    'seed': 3,
+    't_max': 1005000,
+    'target_update_interval': 200,
+    'test_greedy': True,
+    'test_interval': 10000,
+    'test_nepisode': 300,
+    'use_action_repr': False,
+    'use_cuda': True,
+    'use_tensorboard': True}
+
+[INFO 03:20:14] my_main Beginning training for 1005000 timesteps
+/home/ludwika/DIVA/src/components/episode_buffer.py:103: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /opt/conda/conda-bld/pytorch_1729647348947/work/torch/csrc/utils/tensor_new.cpp:278.)
+  v = th.tensor(v, dtype=dtype, device=self.device)
+/home/ludwika/DIVA/src/components/episode_buffer.py:103: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  v = th.tensor(v, dtype=dtype, device=self.device)
+[INFO 03:20:15] my_main t_env: 8 / 1005000
+[INFO 03:20:15] my_main Estimated time left: 38 seconds. Time passed: 0 seconds
+[INFO 03:20:19] my_main Saving models to results/models/qtran-seed3__2026-05-03_03-20-12/8
+[INFO 03:20:34] my_main Updated target network
+[INFO 03:20:53] my_main Updated target network
+[INFO 03:21:15] my_main Updated target network
+[INFO 03:21:42] my_main Updated target network
+[INFO 03:22:10] my_main Updated target network
+[INFO 03:22:38] my_main Updated target network
+[INFO 03:22:42] my_main Recent Stats | t_env:      10000 | Episode:     1250
+agent_indiv_qs:            0.0001	battle_won_mean:           0.0000	ep_length_mean:            8.0000	epsilon:                   1.0000
+loss:                      0.3570	nopt_loss:                 0.1026	opt_loss:                  0.3454
+return_mean:               0.0000	return_std:                0.0000	td_chosen_qs:              0.0855	td_error_abs:              0.0225
+td_loss:                   0.0014	td_targets:                0.0111	test_battle_won_mean:      0.0000	test_ep_length_mean:       8.0000
+test_return_mean:          0.0000	test_return_std:           0.0000	v_mean:                   -0.0597	
+[INFO 03:22:42] my_main t_env: 10008 / 1005000
+[INFO 03:22:42] my_main Estimated time left: 4 hours, 3 minutes, 52 seconds. Time passed: 2 minutes, 27 seconds
+[INFO 03:23:07] my_main Updated target network
+[INFO 03:23:36] my_main Updated target network
+[INFO 03:24:05] my_main Updated target network

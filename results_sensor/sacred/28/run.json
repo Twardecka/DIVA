@@ -1,0 +1,98 @@
+{
+  "artifacts": [],
+  "command": "my_main",
+  "experiment": {
+    "base_dir": "/home1/twardeck/DIVA/src",
+    "dependencies": [
+      "numpy==1.23.5",
+      "PyYAML==6.0.1",
+      "sacred==0.8.7",
+      "torch==2.5.1"
+    ],
+    "mainfile": "main.py",
+    "name": "pymarl",
+    "repositories": [
+      {
+        "commit": "fd7ccf9c2676f4e38f5c389ef351c569e1fd6fb2",
+        "dirty": true,
+        "url": "https://github.com/Twardecka/DIVA.git"
+      },
+      {
+        "commit": "fd7ccf9c2676f4e38f5c389ef351c569e1fd6fb2",
+        "dirty": true,
+        "url": "https://github.com/Twardecka/DIVA.git"
+      },
+      {
+        "commit": "fd7ccf9c2676f4e38f5c389ef351c569e1fd6fb2",
+        "dirty": true,
+        "url": "https://github.com/Twardecka/DIVA.git"
+      }
+    ],
+    "sources": [
+      [
+        "main.py",
+        "_sources/main_5a5a6c0705794125e5924e197082f0a5.py"
+      ],
+      [
+        "run.py",
+        "_sources/run_ec493b2d4d927f66b1114a98b914ff53.py"
+      ],
+      [
+        "utils/logging.py",
+        "_sources/logging_3d24c8558add01fe2a5eade3ecbead6b.py"
+      ]
+    ]
+  },
+  "heartbeat": "2026-05-03T08:50:18.110901",
+  "host": {
+    "ENV": {},
+    "cpu": "AMD EPYC 7513 32-Core Processor",
+    "hostname": "a04-18.hpc.usc.edu",
+    "os": [
+      "Linux",
+      "Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28"
+    ],
+    "python_version": "3.11.11"
+  },
+  "meta": {
+    "command": "my_main",
+    "config_updates": {
+      "seed": 8,
+      "use_cuda": false
+    },
+    "named_configs": [],
+    "options": {
+      "--beat-interval": null,
+      "--capture": null,
+      "--comment": null,
+      "--debug": false,
+      "--enforce_clean": false,
+      "--file_storage": null,
+      "--force": false,
+      "--help": false,
+      "--id": null,
+      "--loglevel": null,
+      "--mongo_db": null,
+      "--name": null,
+      "--pdb": false,
+      "--print-config": false,
+      "--priority": null,
+      "--queue": false,
+      "--s3": null,
+      "--sql": null,
+      "--tiny_db": null,
+      "--unobserved": false,
+      "COMMAND": null,
+      "UPDATE": [
+        "seed=8",
+        "use_cuda=False"
+      ],
+      "help": false,
+      "with": true
+    }
+  },
+  "resources": [],
+  "result": null,
+  "start_time": "2026-05-03T07:37:11.459937",
+  "status": "RUNNING"
+}

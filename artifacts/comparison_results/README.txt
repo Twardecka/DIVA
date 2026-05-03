@@ -9,7 +9,9 @@ Algorithm labels:
 - diva_v1 = diva_bounded_sigmoid_qmix_DIVA
 - diva_v2 = diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2
 
+- diva_v3 = results/sacred/13-20 (diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5)
+
 Run counts by environment:
-- gather: 27 runs
-- hallway: 25 runs
-- disperse: 26 runs
+- gather: 31 runs
+- hallway: 29 runs
+- disperse: 30 runs

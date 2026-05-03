@@ -10,6 +10,8 @@ Contents:
 Algorithm labels:
 - diva_v1 = diva_bounded_sigmoid_qmix_DIVA
 - diva_v2 = diva_bounded_sigmoid_qmix_DIVA_scale1_capacity64_gate2
+- diva_v3 = results/sacred/13-20 (diva_bounded_sigmoid_qmix_DIVA_vscale1_rmax5 runs)
 
 Top 4 diva_v1 seeds: 7, 5, 4, 8
 Top 4 diva_v2 seeds: 5, 3, 8, 4
+Top 4 diva_v3 seeds: 

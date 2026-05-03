@@ -1,0 +1,160 @@
+[INFO 15:23:48] pymarl Running command 'my_main'
+[INFO 15:23:48] pymarl Started run with ID "21"
+[DEBUG 15:23:48] pymarl Starting Heartbeat
+[DEBUG 15:23:48] my_main Started
+[INFO 15:23:48] my_main Experiment Parameters:
+[INFO 15:23:48] my_main 
+
+{   'action_selector': 'epsilon_greedy',
+    'agent': 'rnn_DIVA',
+    'agent_output_type': 'q',
+    'batch_size': 32,
+    'batch_size_run': 1,
+    'buffer_cpu_only': True,
+    'buffer_size': 5000,
+    'checkpoint_path': '',
+    'critic_lr': 0.0005,
+    'diva_b1_scale': 1.0,
+    'diva_gate_scale': 1.0,
+    'diva_positive_offset': 0.001,
+    'diva_r_max': 10.0,
+    'diva_use_spectral_norm': True,
+    'diva_v_scale': 1.0,
+    'diva_w1_scale': 0.5,
+    'diva_w2_scale': 0.5,
+    'double_q': True,
+    'env': 'disperse',
+    'env_args': {   'episode_limit': 10,
+                    'initial_need': [   0,
+                                        0,
+                                        0,
+                                        0],
+                    'n_actions': 4,
+                    'n_agents': 12,
+                    'obs_last_action': False,
+                    'seed': 3,
+                    'state_last_action': True},
+    'epsilon_anneal_time': 500000,
+    'epsilon_finish': 0.05,
+    'epsilon_start': 1.0,
+    'evaluate': False,
+    'gamma': 0.99,
+    'grad_norm_clip': 10,
+    'hypernet_embed': 64,
+    'hypernet_layers': 2,
+    'label': 'default_label',
+    'learner': 'q_learner_DIVA',
+    'learner_log_interval': 10000,
+    'load_step': 0,
+    'local_results_path': 'results',
+    'log_interval': 10000,
+    'lr': 0.0005,
+    'mac': 'basic_mac_DIVA',
+    'mixer': 'bounded_sigmoid_qmix_DIVA',
+    'mixing_embed_dim': 32,
+    'name': 'diva_bounded_sigmoid_qmix_DIVA_vscale1_clean',
+    'obs_agent_id': True,
+    'obs_last_action': True,
+    'optim_alpha': 0.99,
+    'optim_eps': 1e-05,
+    'repeat_id': 1,
+    'rnn_hidden_dim': 64,
+    'runner': 'episode',
+    'runner_log_interval': 10000,
+    'save_model': True,
+    'save_model_interval': 2000000,
+    'save_replay': False,
+    'seed': 3,
+    't_max': 1005000,
+    'target_update_interval': 200,
+    'test_greedy': True,
+    'test_interval': 10000,
+    'test_nepisode': 300,
+    'use_action_repr': False,
+    'use_cuda': True,
+    'use_tensorboard': True}
+
+[INFO 15:23:51] my_main Beginning training for 1005000 timesteps
+/home/ludwika/DIVA/src/components/episode_buffer.py:103: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /opt/conda/conda-bld/pytorch_1729647348947/work/torch/csrc/utils/tensor_new.cpp:278.)
+  v = th.tensor(v, dtype=dtype, device=self.device)
+/home/ludwika/DIVA/src/components/episode_buffer.py:103: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  v = th.tensor(v, dtype=dtype, device=self.device)
+[INFO 15:23:51] my_main t_env: 10 / 1005000
+[INFO 15:23:51] my_main Estimated time left: 47 seconds. Time passed: 0 seconds
+[INFO 15:24:21] my_main Saving models to results/models/diva_bounded_sigmoid_qmix_DIVA_vscale1_clean-seed3__2026-05-03_15-23-48/10
+[INFO 15:25:22] my_main Updated target network
+[INFO 15:26:49] my_main Updated target network
+[INFO 15:28:19] my_main Updated target network
+[INFO 15:29:36] my_main Updated target network
+[INFO 15:31:03] my_main Recent Stats | t_env:      10000 | Episode:     1000
+battle_won_mean:           0.0000	ep_length_mean:           10.0000	epsilon:                   1.0000	gate_max:                  0.9366
+gate_mean:                 0.4654	gate_min:                  0.0665	gate_std:                  0.1387	loss:                    560.9981	match_mean:               31.0000	q_taken_mean:              0.5948	return_mean:              -4.1667
+return_std:                0.0000	target_mean:               2.3545	td_error_abs:             22.4943	test_battle_won_mean:      0.0000
+test_ep_length_mean:      10.0000	test_match_mean:          33.0533	test_return_mean:         -5.1897	test_return_std:           0.9642
+v_mean:                    0.2308	w1_max:                    0.4189	w1_mean:                   0.2489	w1_min:                    0.0882
+w1_std:                    0.0342	w2_max:                    0.4604	w2_mean:                   0.2428	w2_min:                    0.0414
+w2_std:                    0.0631	
+[INFO 15:31:03] my_main Updated target network
+[INFO 15:31:03] my_main t_env: 10010 / 1005000
+[INFO 15:31:03] my_main Estimated time left: 11 hours, 56 minutes, 44 seconds. Time passed: 7 minutes, 12 seconds
+[INFO 15:33:03] my_main Updated target network
+[INFO 15:34:35] my_main Updated target network
+[INFO 15:35:49] my_main Updated target network
+[INFO 15:37:23] my_main Updated target network
+[INFO 15:38:43] my_main Recent Stats | t_env:      20000 | Episode:     2000
+battle_won_mean:           0.0000	ep_length_mean:           10.0000	epsilon:                   0.9810	gate_max:                  0.8282
+gate_mean:                 0.4793	gate_min:                  0.1385	gate_std:                  0.0988	loss:                    282.7984	match_mean:               31.0540	q_taken_mean:              0.9252	return_mean:              -4.3260
+return_std:                0.3088	target_mean:               1.8857	td_error_abs:             12.2197	test_battle_won_mean:      0.0000
+test_ep_length_mean:      10.0000	test_match_mean:          32.3733	test_return_mean:         -4.8625	test_return_std:           0.9416
+v_mean:                    0.6096	w1_max:                    0.3634	w1_mean:                   0.2499	w1_min:                    0.1360
+w1_std:                    0.0239	w2_max:                    0.4038	w2_mean:                   0.2478	w2_min:                    0.0951
+w2_std:                    0.0439	
+[INFO 15:38:44] my_main Updated target network
+[INFO 15:38:44] my_main t_env: 20010 / 1005000
+[INFO 15:38:44] my_main Estimated time left: 12 hours, 35 minutes, 54 seconds. Time passed: 14 minutes, 53 seconds
+[INFO 15:40:40] my_main Updated target network
+[INFO 15:42:03] my_main Updated target network
+[INFO 15:43:34] my_main Updated target network
+[INFO 15:45:03] my_main Updated target network
+[INFO 15:46:25] my_main Recent Stats | t_env:      30000 | Episode:     3000
+battle_won_mean:           0.0000	ep_length_mean:           10.0000	epsilon:                   0.9620	gate_max:                  0.7903
+gate_mean:                 0.4672	gate_min:                  0.1624	gate_std:                  0.0856	loss:                    188.6129	match_mean:               31.0710	q_taken_mean:              0.6797	return_mean:              -4.3790
+return_std:                0.4174	target_mean:               1.3116	td_error_abs:              8.2763	test_battle_won_mean:      0.0000
+test_ep_length_mean:      10.0000	test_match_mean:          32.4433	test_return_mean:         -4.6439	test_return_std:           0.9497
+v_mean:                    0.7395	w1_max:                    0.3518	w1_mean:                   0.2452	w1_min:                    0.1404
+w1_std:                    0.0238	w2_max:                    0.3850	w2_mean:                   0.2173	w2_min:                    0.0663
+w2_std:                    0.0503	
+[INFO 15:46:25] my_main Updated target network
+[INFO 15:46:25] my_main t_env: 30010 / 1005000
+[INFO 15:46:25] my_main Estimated time left: 12 hours, 30 minutes, 24 seconds. Time passed: 22 minutes, 34 seconds
+[INFO 15:48:31] my_main Updated target network
+[INFO 15:50:06] my_main Updated target network
+[INFO 15:51:36] my_main Updated target network
+[INFO 15:52:59] my_main Updated target network
+[INFO 15:54:19] my_main Recent Stats | t_env:      40000 | Episode:     4000
+battle_won_mean:           0.0000	ep_length_mean:           10.0000	epsilon:                   0.9430	gate_max:                  0.7669
+gate_mean:                 0.4307	gate_min:                  0.1392	gate_std:                  0.0873	loss:                    141.4801	match_mean:               31.0805	q_taken_mean:              0.4704	return_mean:              -4.3860
+return_std:                0.4724	target_mean:               0.9413	td_error_abs:              6.2644	test_battle_won_mean:      0.0000
+test_ep_length_mean:      10.0000	test_match_mean:          32.4483	test_return_mean:         -4.3812	test_return_std:           0.9271
+v_mean:                    0.7916	w1_max:                    0.3456	w1_mean:                   0.2389	w1_min:                    0.1376
+w1_std:                    0.0235	w2_max:                    0.3888	w2_mean:                   0.1991	w2_min:                    0.0536
+w2_std:                    0.0536	
+[INFO 15:54:19] my_main Updated target network
+[INFO 15:54:19] my_main t_env: 40010 / 1005000
+[INFO 15:54:19] my_main Estimated time left: 12 hours, 41 minutes, 35 seconds. Time passed: 30 minutes, 28 seconds
+[INFO 15:56:30] my_main Updated target network
+[INFO 15:58:03] my_main Updated target network
+[INFO 15:59:15] my_main Updated target network
+[INFO 16:00:50] my_main Updated target network
+[INFO 16:02:09] my_main Recent Stats | t_env:      50000 | Episode:     5000
+battle_won_mean:           0.0000	ep_length_mean:           10.0000	epsilon:                   0.9240	gate_max:                  0.7024
+gate_mean:                 0.3855	gate_min:                  0.1203	gate_std:                  0.0804	loss:                    113.1955	match_mean:               31.0938	q_taken_mean:              0.3402	return_mean:              -4.3830
+return_std:                0.5033	target_mean:               0.7184	td_error_abs:              5.0492	test_battle_won_mean:      0.0000
+test_ep_length_mean:      10.0000	test_match_mean:          32.7553	test_return_mean:         -4.1761	test_return_std:           0.9333
+v_mean:                    0.8254	w1_max:                    0.3410	w1_mean:                   0.2321	w1_min:                    0.1290
+w1_std:                    0.0240	w2_max:                    0.3807	w2_mean:                   0.1977	w2_min:                    0.0522
+w2_std:                    0.0545	
+[INFO 16:02:10] my_main Updated target network
+[INFO 16:02:10] my_main t_env: 50010 / 1005000
+[INFO 16:02:10] my_main Estimated time left: 12 hours, 29 minutes, 19 seconds. Time passed: 38 minutes, 19 seconds
+[INFO 16:04:19] my_main Updated target network
